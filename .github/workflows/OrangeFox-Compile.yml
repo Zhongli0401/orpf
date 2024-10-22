@@ -69,6 +69,7 @@ jobs:
         git clone https://gitlab.com/OrangeFox/misc/scripts.git -b master
         cd scripts
         sudo bash setup/android_build_env.sh
+        sudo bash setup/install_android_sdk.sh
       
     - name: Set-up Manifest
       if: inputs.MANIFEST_BRANCH == '11.0' || inputs.MANIFEST_BRANCH == '12.1'
@@ -81,12 +82,13 @@ jobs:
         cd sync
         ./orangefox_sync.sh --branch ${{ inputs.MANIFEST_BRANCH }} --path ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
 
-    - name: Clone Snapuserd Dependencies
-      run: |
-        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
-        rm -rf ./external/gflags
-        git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
-        
+     
+     #- name: Clone Snapuserd Dependencies
+      #run: |
+       # cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
+        #rm -rf ./external/gflags
+        #git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
+      
     - name: Clone Device Tree
       run: |
         cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
@@ -98,8 +100,27 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
         set +e
-        source build/envsetup.sh
-        export ALLOW_MISSING_DEPENDENCIES=true
+        export LC_ALL="C.UTF-8"
+        export FOX_BUILD_DEVICE="marble"
+ 	    export ALLOW_MISSING_DEPENDENCIES=true
+ 	    export FOX_VANILLA_BUILD=1
+	    export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+	    export TARGET_DEVICE_ALT="marble"
+	    export FOX_RECOVERY_SYSTEM_PARTITION="/dev/block/mapper/system"
+	    export FOX_RECOVERY_VENDOR_PARTITION="/dev/block/mapper/vendor"
+	    export FOX_DELETE_INITD_ADDON=1
+	    export FOX_SETTINGS_ROOT_DIRECTORY="/persist/OFRP"
+	    export FOX_REPLACE_BUSYBOX_PS=1
+	    export FOX_USE_BASH_SHELL=1
+	    export FOX_ASH_IS_BASH=1
+	    export FOX_REPLACE_TOOLBOX_GETPROP=1
+	    export FOX_USE_TAR_BINARY=1
+	    export FOX_USE_XZ_UTILS=1
+	    export FOX_USE_SED_BINARY=1
+	    export FOX_USE_NANO_EDITOR=1
+	    export FOX_VIRTUAL_AB_DEVICE=1
+	    export FOX_DELETE_AROMAFM=1
+	    export FOX_ENABLE_APP_MANAGER=1
         set -e
         lunch twrp_${{ inputs.DEVICE_NAME }}-eng && make clean && mka adbd ${{ inputs.BUILD_TARGET }}image
 
