@@ -1,0 +1,111 @@
+name: Build OFRP
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  build_recovery:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [Marble]
+        
+    steps:          
+      - name: Cleanup
+        uses: rokibhasansagar/slimhub_actions@main
+        
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 12
+
+      - name: Set date variable
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Install repo
+        run: |
+          mkdir ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo -o ~/bin/repo
+          chmod a+x ~/bin/repo
+          sudo ln -sf ~/bin/repo /usr/bin/repo
+
+      - name: Setup Env
+        run: |
+          sudo apt install git aria2 -y
+          git clone https://gitlab.com/OrangeFox/misc/scripts ~/scripts
+          cd ~/scripts
+          sudo bash setup/android_build_env.sh
+          sed -i 's/cd -/cd ../g' setup/install_android_sdk.sh
+          sudo bash setup/install_android_sdk.sh
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "76640596+github-actions[bot]@users.noreply.github.com"
+
+      - name: Clean Dir
+        run: |
+          ls | xargs rm -fr
+
+      - name: Initialize repo
+        run: |
+          export WORK_DIR="$(pwd)"
+          cd ~/scripts
+          git clone https://gitlab.com/OrangeFox/sync.git
+          cd sync
+          ./orangefox_sync.sh --branch 12.1 --path $WORK_DIR/fox-12.1
+
+      - name: Cloning Trees
+        run: |
+          git clone --branch main https://https://github.com/Zhongli0401/orpf.git device/xiaomi/marble
+        working-directory: ./fox-12.1
+      
+      - name: Build Recovery
+        run: |
+          set +e
+          export ALLOW_MISSING_DEPENDENCIES=true
+          export FOX_BUILD_DEVICE=marble
+          export LC_ALL="C.UTF-8"
+          source build/envsetup.sh
+          set -e
+          lunch twrp_marble-eng && make clean && mka adbd recoveryimage
+          
+        working-directory: ./fox-12.1
+
+      - name: Repack Image
+        run: |
+          mkdir ~/files
+          cp out/target/product/marble/recovery.img ~/twrp-build/ofrp.img
+          
+          cp OFRP* ~/files
+        working-directory: ./fox-12.1
+
+      - name: Publish to GitHub
+        id: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /home/runner/files/OFRP*
+          name: OrangeFox 12.1
+          tag_name: "${{ env.DATE }}"
+          body: |
+            hope it works:
+            https://github.com/Zhongli0401/orpf/blob/main/BoardConfig.mk
+            
+            :rocket: *Built with love by GitHub Actions.*
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
