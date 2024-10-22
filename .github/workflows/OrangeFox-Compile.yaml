@@ -99,11 +99,11 @@ jobs:
         cd sync
         ./orangefox_sync.sh --branch ${{ inputs.MANIFEST_BRANCH }} --path ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
 
-    - name: Clone Snapuserd Dependencies
-      run: |
-        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
-        rm -rf ./external/gflags
-        git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
+   # - name: Clone Snapuserd Dependencies
+    #  run: |
+     #   cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
+      #  rm -rf ./external/gflags
+       # git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
       
     - name: Clone Device Tree
       run: |
@@ -118,7 +118,7 @@ jobs:
         set +e
         source build/envsetup.sh
         set -e
-        lunch ${{ inputs.DEVICE_NAME }}-eng && make clean && mka adbd ${{ inputs.DEVICE_NAME }}image -j$(nproc --all)
+        lunch ${{ inputs.DEVICE_NAME }}-eng && make clean && mka adbd ${{ inputs.DEVICE_NAME }}image
 
     - name: Set Release Properties
       run: |
@@ -129,8 +129,8 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}/out/target/product/${{ inputs.DEVICE_NAME }}/target/product/marble/OrangeFox-Unofficial-marble*.img
-          OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}/out/target/product/${{ inputs.DEVICE_NAME }}/target/product/marble/OrangeFox-Unofficial-marble*.zip
+          OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}/out/target/product/${{ inputs.DEVICE_NAME }}/OrangeFox-Unofficial-marble*.img
+          OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}/out/target/product/${{ inputs.DEVICE_NAME }}/OrngeFox-Unofficial-marble*.zip
         name: OrangeFox Recovery for ${{ inputs.DEVICE_NAME }} // ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
