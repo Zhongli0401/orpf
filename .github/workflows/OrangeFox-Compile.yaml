@@ -116,27 +116,6 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
         set +e
-        export LC_ALL="C.UTF-8"
-        export FOX_BUILD_DEVICE="marble"
-        export ALLOW_MISSING_DEPENDENCIES=true
-        export FOX_VANILLA_BUILD=1
-        export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
-        export TARGET_DEVICE_ALT="marble"
-        export FOX_RECOVERY_SYSTEM_PARTITION="/dev/block/mapper/system"
-        export FOX_RECOVERY_VENDOR_PARTITION="/dev/block/mapper/vendor"
-        export FOX_DELETE_INITD_ADDON=1
-        export FOX_SETTINGS_ROOT_DIRECTORY="/persist/OFRP"
-        export FOX_REPLACE_BUSYBOX_PS=1
-        export FOX_USE_BASH_SHELL=1
-        export FOX_ASH_IS_BASH=1
-        export FOX_REPLACE_TOOLBOX_GETPROP=1
-        export FOX_USE_TAR_BINARY=1
-        export FOX_USE_XZ_UTILS=1
-        export FOX_USE_SED_BINARY=1
-        export FOX_USE_NANO_EDITOR=1
-        export FOX_VIRTUAL_AB_DEVICE=1
-        export FOX_DELETE_AROMAFM=1
-        export FOX_ENABLE_APP_MANAGER=1
         source build/envsetup.sh
         set -e
         lunch ${{ inputs.DEVICE_NAME }}-eng && make clean && mka adbd ${{ inputs.DEVICE_NAME }}image -j$(nproc --all)
