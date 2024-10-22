@@ -72,7 +72,7 @@ jobs:
 
       - name: Cloning Trees
         run: |
-          git clone --branch main https://https://github.com/Zhongli0401/orpf.git device/xiaomi/marble
+          git clone --branch main https://github.com/Zhongli0401/orpf.git device/xiaomi/marble
         working-directory: ./fox-12.1
       
       - name: Build Recovery
