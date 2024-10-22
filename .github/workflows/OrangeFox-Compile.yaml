@@ -59,19 +59,19 @@ jobs:
       uses: rokibhasansagar/slimhub_actions@main
 
     - name: Setup Java JDK
-        uses: actions/setup-java@v4.2.1
-        with:
+      uses: actions/setup-java@v4.2.1
+      with:
           distribution: 'zulu'
           java-version: '21'
 
     - name: Set up Python 3
-        uses: actions/setup-python@v5
-        with:
+      uses: actions/setup-python@v5
+      with:
           python-version: '3.x'
 
     - name: Set Swap Space
-        uses: pierotofy/set-swap-space@master
-        with:
+      uses: pierotofy/set-swap-space@master
+      with:
           swap-size-gb: 12
       
     - name: Build Environment
@@ -84,7 +84,7 @@ jobs:
           sudo bash setup/install_android_sdk.sh
 
     - name: Clean Dir
-        run: |
+      run: |
           ls | xargs rm -fr
 
       
@@ -99,11 +99,11 @@ jobs:
         cd sync
         ./orangefox_sync.sh --branch ${{ inputs.MANIFEST_BRANCH }} --path ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
 
-    # - name: Clone Snapuserd Dependencies
-      #run: |
-       # cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
-        #rm -rf ./external/gflags
-        #git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
+    - name: Clone Snapuserd Dependencies
+      run: |
+        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
+        rm -rf ./external/gflags
+        git clone --depth=1 https://android.googlesource.com/platform/external/gflags -b android-12.1.0_r27 ./external/gflags
       
     - name: Clone Device Tree
       run: |
