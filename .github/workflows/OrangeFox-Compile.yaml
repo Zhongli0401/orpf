@@ -114,7 +114,7 @@ jobs:
 
     - name: Building OrangeFox
       run: |
-        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}/marble
+        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
         set +e
         export LC_ALL="C.UTF-8"
         export FOX_BUILD_DEVICE="marble"
