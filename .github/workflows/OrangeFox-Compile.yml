@@ -98,6 +98,7 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ inputs.MANIFEST_BRANCH }}
         set +e
+        source build/envsetup.sh
         export LC_ALL="C.UTF-8"
         export FOX_BUILD_DEVICE="marble"
         export ALLOW_MISSING_DEPENDENCIES=true
