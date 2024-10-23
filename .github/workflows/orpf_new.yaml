@@ -84,15 +84,16 @@ jobs:
           source build/envsetup.sh
           set -e
           lunch twrp_marble-eng && make clean && mka adbd recoveryimage
+
+          
           
         working-directory: ./fox-12.1
-
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
            files: |
-                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.img
-                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.zip
+                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble.img
+                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble.zip
            name: OrangeFox Recovery
            tag_name: ${{ github.run_id }}
            body: | 
