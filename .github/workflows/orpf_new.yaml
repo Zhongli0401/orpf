@@ -87,19 +87,11 @@ jobs:
           
         working-directory: ./fox-12.1
 
-      - name: Repack Image
-        run: |
-          mkdir ~/files
-          cp out/target/product/marble/recovery.img ~/twrp-build/ofrp.img
-          
-          cp OFRP* ~/files
-        working-directory: ./fox-12.1
-
       - name: Publish to GitHub
         id: release
         uses: softprops/action-gh-release@v2
         with:
-          files: /home/runner/files/OFRP*
+          files: /home/runner/work/orpf*
           name: OrangeFox 12.1
           tag_name: "${{ env.DATE }}"
           body: |
