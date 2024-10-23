@@ -91,7 +91,10 @@ jobs:
         id: release
         uses: softprops/action-gh-release@v2
         with:
-          files: /home/runner/work/orpf*
+          files: 
+            home/runner/work/orpf/orpf/fox-12.1/out/target/product/marble/target/product/marble/OrngeFox-Unofficial-marble*.zip
+            home/runner/work/orpf/orpf/fox-12.1/out/target/product/marble/target/product/marble/OrngeFox-Unofficial-marble*.img
+  
           name: OrangeFox 12.1
           tag_name: "${{ env.DATE }}"
           body: |
