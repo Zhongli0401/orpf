@@ -91,8 +91,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
            files: |
-                 fox_12.1/out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.img
-                 fox_12.1/out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.zip
+                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.img
+                 out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.zip
            name: OrangeFox Recovery
            tag_name: ${{ github.run_id }}
            body: | 
