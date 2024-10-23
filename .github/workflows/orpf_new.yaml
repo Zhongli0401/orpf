@@ -87,20 +87,14 @@ jobs:
           
         working-directory: ./fox-12.1
 
-      - name: Publish to GitHub
-        id: release
+      - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            home/runner/work/orpf/orpf/fox-12.1/out/target/product/marble/target/product/marble/OrngeFox-Unofficial-marble.zip
-            home/runner/work/orpf/orpf/fox-12.1/out/target/product/marble/target/product/marble/OrngeFox-Unofficial-marble.img
-  
-          name: OrangeFox 12.1
-          tag_name: "${{ env.DATE }}"
-          body: |
-            hope it works:
-            https://github.com/Zhongli0401/orpf/blob/main/BoardConfig.mk
-            
-            :rocket: *Built with love by GitHub Actions.*
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+           files: |
+                 fox_12.1/out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.img
+                 fox_12.1/out/target/product/marble/target/product/marble/OrangeFox-Unofficial-marble*.zip
+           name: OrangeFox Recovery
+           body: | 
+                   ## OrangeFox Recovery Build - Unofficial
+                   Build: fox_12
+                   Device: marble
